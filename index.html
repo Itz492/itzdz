@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>I Love You Flying Hearts</title>
+  <style>
+    body {
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: sans-serif;
+      position: relative;
+    }
+
+    .character {
+      font-size: 60px;
+      margin-bottom: 20px;
+      z-index: 2;
+      position: relative;
+      color: white;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 22px;
+      opacity: 0;
+      transition: all 2s ease-in-out;
+      animation: float 4s ease-in-out infinite, glowHeart 2s infinite alternate;
+      text-shadow: 0 0 10px #ff4da6, 0 0 20px #ff80bf, 0 0 30px #ffb3d9;
+    }
+
+    /* Tim rung rinh */
+    @keyframes float {
+      0%   { transform: translateY(0) scale(1); }
+      25%  { transform: translateY(-5px) scale(1.1); }
+      50%  { transform: translateY(0) scale(1); }
+      75%  { transform: translateY(5px) scale(0.95); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    /* Tim lấp lánh */
+    @keyframes glowHeart {
+      from { text-shadow: 0 0 5px #ff4da6, 0 0 10px #ff80bf; opacity: 0.9; }
+      to   { text-shadow: 0 0 15px #ff1a8c, 0 0 30px #ff66b2; opacity: 1; }
+    }
+
+    /* Chữ I Love You */
+    .loveText {
+      font-size: 50px;
+      font-weight: bold;
+      color: #ff4da6;
+      opacity: 0;
+      position: absolute;
+      top: 70%;
+      text-shadow: 0 0 10px #ff80bf, 0 0 20px #ffb3d9;
+      animation: fadeIn 3s ease forwards, pulse 2s infinite alternate;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to   { transform: scale(1.1); }
+    }
+
+    /* Ngôi sao ✨ */
+    .star {
+      position: absolute;
+      font-size: 10px;
+      color: white;
+      opacity: 0.8;
+      animation: rise linear infinite;
+    }
+
+    @keyframes rise {
+      from { transform: translateY(0); opacity: 0.8; }
+      to   { transform: translateY(-800px); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="loveText" class="loveText">I Love You Ngoc Tramm</div>
+
+  <script>
+    // Pattern trái tim
+    const heartPattern = [
+      "01100000110",
+      "11110011111",
+      "11111111111",
+      "11111111111",
+      "01111111110",
+      "00111111100",
+      "00011111000",
+      "00001110000",
+      "00000100000"
+    ];
+
+    const container = document.body;
+    const heartSize = 26;
+
+    const offsetX = window.innerWidth / 2 - (heartPattern[0].length * heartSize) / 2;
+    const offsetY = window.innerHeight / 3 - (heartPattern.length * heartSize) / 2;
+
+    let delay = 0;
+
+    // Render trái tim
+    heartPattern.forEach((row, y) => {
+      [...row].forEach((cell, x) => {
+        if (cell === "1") {
+          const heart = document.createElement("div");
+          heart.classList.add("heart");
+          heart.textContent = "❤️";
+
+          setRandomStart(heart);
+          container.appendChild(heart);
+
+          setTimeout(() => {
+            heart.style.opacity = 1;
+            heart.style.left = offsetX + x * heartSize + "px";
+            heart.style.top = offsetY + y * heartSize + "px";
+          }, 200 + delay * 100);
+
+          delay++;
+        }
+      });
+    });
+
+    // Hiện chữ I Love You sau khi tim xong
+    setTimeout(() => {
+      document.getElementById("loveText").style.opacity = 1;
+    }, delay * 120 + 1000);
+
+    // Hàm random start tim
+    function setRandomStart(el) {
+      const side = Math.floor(Math.random() * 4);
+      switch (side) {
+        case 0: el.style.left = Math.random() * window.innerWidth + "px"; el.style.top = "-50px"; break;
+        case 1: el.style.left = Math.random() * window.innerWidth + "px"; el.style.top = window.innerHeight + 50 + "px"; break;
+        case 2: el.style.left = "-50px"; el.style.top = Math.random() * window.innerHeight + "px"; break;
+        case 3: el.style.left = window.innerWidth + 50 + "px"; el.style.top = Math.random() * window.innerHeight + "px"; break;
+      }
+    }
+
+    // Tạo ngôi sao bay lên
+    function createStar() {
+      const star = document.createElement("div");
+      star.classList.add("star");
+      star.textContent = "✦";
+
+      star.style.left = Math.random() * window.innerWidth + "px";
+      star.style.top = window.innerHeight + "px";
+
+      const size = Math.random() * 8 + 5;
+      star.style.fontSize = size + "px";
+
+      const duration = Math.random() * 5 + 5;
+      star.style.animationDuration = duration + "s";
+
+      container.appendChild(star);
+
+      setTimeout(() => {
+        star.remove();
+      }, duration * 1000);
+    }
+
+    setInterval(createStar, 300); // tạo sao liên tục
+  </script>
+</body>
+</html>
